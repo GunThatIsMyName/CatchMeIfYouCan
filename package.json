@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "MAKE IT REAL TIME",
   "scripts": {
-    "server": "nodemon --exec babel-node src/server.js --ignore assets/ --ignore src/static",
+    "server": "nodemon",
     "dev": "gulp dev",
-    "build":"gulp build"
+    "build": "gulp styles"
   },
   "repository": {
     "type": "git",
