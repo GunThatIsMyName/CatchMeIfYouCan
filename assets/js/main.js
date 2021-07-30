@@ -3,6 +3,7 @@ import "./notification"
 import "./socket"
 // import "./chat"
 import "./paint"
+import "./player"
 
 
 

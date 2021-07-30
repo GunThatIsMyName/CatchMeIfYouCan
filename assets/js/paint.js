@@ -3,6 +3,7 @@ import { getSocket } from "./socket";
 const canvas = document.querySelector("canvas");
 const jsColors = document.querySelector(".canvas-Colors");
 const jsMode = document.querySelector(".jsMode");
+const controls = document.querySelector(".controls")
 
 const ctx = canvas.getContext("2d");
 ctx.strokeStyle = "#2c2c2c";
@@ -63,8 +64,8 @@ function handleColor(event) {
 }
 function handleFilling() {
   if (filling) {
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    getSocket.emit()
+    fill()
+    getSocket().emit(window.events.fill,{color:ctx.fillStyle})
   }
 }
 function handleMode() {
@@ -81,6 +82,14 @@ function handleMode() {
 function handleRightClick(e) {
   e.preventDefault();
 }
+function fill(color){
+  let currentColor = ctx.fillStyle;
+  if(color){
+    ctx.fillStyle = color
+  }
+  ctx.fillRect(0,0,canvas.width,canvas.height)
+  ctx.fillStyle = currentColor;
+}
 
 export const handleBeganPath = ({ x, y }) => {
   beginPath(x, y);
@@ -88,12 +97,34 @@ export const handleBeganPath = ({ x, y }) => {
 export const handleStrokePath = ({ x, y,color }) => {
   strokePath(x, y,color);
 };
-if (canvas) {
+export const handleFilled = ({color})=>{
+  fill(color)
+}
+
+export function enableCanvas(){
   canvas.addEventListener("mousemove", handleMouseMove);
   canvas.addEventListener("mousedown", handleTouch);
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("contextmenu", handleRightClick);
-  jsColors.addEventListener("click", handleColor);
-  jsMode.addEventListener("click", handleMode);
 }
+export function disableCanvas(){
+  canvas.removeEventListener("mousemove", handleMouseMove);
+  canvas.removeEventListener("mousedown", handleTouch);
+  canvas.removeEventListener("mouseup", stopPainting);
+  canvas.removeEventListener("mouseleave", stopPainting);
+}
+export const hideControls = ()=>{
+  controls.style.display = "none";
+}
+export const showControls = ()=>{
+  controls.style.display = "block";
+}
+export const resetCanvas =(color)=>{
+  fill(color)
+}
+if (canvas) {
+  canvas.addEventListener("contextmenu", handleRightClick);
+  hideControls()
+}
+jsColors.addEventListener("click", handleColor);
+jsMode.addEventListener("click", handleMode);

@@ -8,7 +8,13 @@ const events = {
     beginPath:"beginPath",
     strokePath:"strokePath",
     beganPath:"beganPath",
-    strokedPath:"strokedPath"
+    strokedPath:"strokedPath",
+    fill:"fill",
+    filled:"filled",
+    playerUpdate:"playerUpdate",
+    gameStart:"gameStart",
+    painterNoti:"painterNoti",
+    gameEnded:"gameEnded"
 }
 
 export default events

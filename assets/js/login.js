@@ -42,7 +42,6 @@ function paintUserName(name){
     welcome.innerText = `${name} 🧚🏻‍♀️`;
     chat__messages.append(welcome);
 }
-
 if(loginForm){
     loginForm.addEventListener("submit",handleSetName)
 }
