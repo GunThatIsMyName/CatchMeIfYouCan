@@ -2,7 +2,7 @@ const loginNotification = document.querySelector("#loginNotification")
 
 
 export const handleUserNoti= ({username})=>{
-    PaintNotification(`🙋🏼‍♀️ HELLO ${username}  -Wlocome!`,'#F8AFA6')
+    PaintNotification(`🙋🏼‍♀️ ${username}  -just joined!`,'#F8AFA6')
 }
 
 const PaintNotification = (name,color)=>{

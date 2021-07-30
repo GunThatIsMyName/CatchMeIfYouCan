@@ -14,5 +14,11 @@ const socketController = (socket)=>{
         console.log("tocuhed")
         broadcast(events.newMsg,{message,username:socket.username})
     })
+    socket.on(events.beginPath,({x,y})=>{
+        broadcast(events.beganPath,{x,y})
+    })
+    socket.on(events.strokePath,({x,y,color})=>{
+        broadcast(events.strokedPath,{x,y,color})
+    })
 }
 export default socketController

@@ -1,93 +1,99 @@
-const canvas = document.getElementById("jsCanvas");
+import { getSocket } from "./socket";
+
+const canvas = document.querySelector("canvas");
+const jsColors = document.querySelector(".canvas-Colors");
+const jsMode = document.querySelector(".jsMode");
+
 const ctx = canvas.getContext("2d");
-const colors = document.getElementsByClassName("jsColor");
-const mode = document.getElementById("jsMode");
-
-const INITIAL_COLOR = "#2c2c2c";
-const CANVAS_SIZE = 400;
-
-canvas.width = CANVAS_SIZE;
-canvas.height = CANVAS_SIZE;
-
-ctx.fillStyle = "white";
-ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-ctx.strokeStyle = INITIAL_COLOR;
-ctx.fillStyle = INITIAL_COLOR;
+ctx.strokeStyle = "#2c2c2c";
+ctx.fillStyle = "#2c2c2c";
 ctx.lineWidth = 2.5;
 
 let painting = false;
 let filling = false;
+const canvasSize = 450;
+canvas.width = canvasSize;
+canvas.height = canvasSize;
 
+function handleTouch() {
+  painting = true;
+}
 function stopPainting() {
   painting = false;
 }
 
-function startPainting() {
-  painting = true;
-}
-
 const beginPath = (x, y) => {
-  ctx.beginPath();
-  ctx.moveTo(x, y);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+};
+const strokePath = (x, y,color) => {
+    let currentColor = ctx.strokeStyle;
+    if(color){
+        ctx.strokeStyle = color;
+    }
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.strokeStyle = currentColor
 };
 
-const strokePath = (x, y) => {
-  ctx.lineTo(x, y);
-  ctx.stroke();
-};
-
-function onMouseMove(event) {
+function handleMouseMove(event) {
   const x = event.offsetX;
   const y = event.offsetY;
   if (!painting) {
     beginPath(x, y);
+    getSocket().emit(window.events.beginPath, { x, y });
   } else {
     strokePath(x, y);
+    getSocket().emit(window.events.strokePath, {
+      x,
+      y,
+      color: ctx.strokeStyle,
+    });
   }
 }
 
-function handleColorClick(event) {
-  const color = event.target.style.backgroundColor;
+function handleColor(event) {
+  const { target } = event;
+  const color = target.style.backgroundColor;
+  if (target.className !== "jsColor") {
+    return;
+  }
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
 }
-
-function handleModeClick() {
-  if (filling === true) {
-    filling = false;
-    mode.innerText = "Fill";
-  } else {
-    filling = true;
-    mode.innerText = "Paint";
-  }
-}
-
-function handleCanvasClick() {
+function handleFilling() {
   if (filling) {
-    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    getSocket.emit()
   }
 }
-
-function handleCM(event) {
-  event.preventDefault();
+function handleMode() {
+  const Mode = jsMode.innerText;
+  if (Mode === "FILL") {
+    jsMode.innerText = "PEN";
+    filling = false;
+  } else {
+    jsMode.innerText = "FILL";
+    filling = true;
+    canvas.addEventListener("mouseup", handleFilling);
+  }
+}
+function handleRightClick(e) {
+  e.preventDefault();
 }
 
+export const handleBeganPath = ({ x, y }) => {
+  beginPath(x, y);
+};
+export const handleStrokePath = ({ x, y,color }) => {
+  strokePath(x, y,color);
+};
 if (canvas) {
-  canvas.addEventListener("mousemove", onMouseMove);
-  canvas.addEventListener("mousedown", startPainting);
+  canvas.addEventListener("mousemove", handleMouseMove);
+  canvas.addEventListener("mousedown", handleTouch);
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
-  canvas.addEventListener("click", handleCanvasClick);
-  canvas.addEventListener("contextmenu", handleCM);
+  canvas.addEventListener("contextmenu", handleRightClick);
+  jsColors.addEventListener("click", handleColor);
+  jsMode.addEventListener("click", handleMode);
 }
-
-Array.from(colors).forEach(color =>
-  color.addEventListener("click", handleColorClick)
-);
-
-if (mode) {
-  mode.addEventListener("click", handleModeClick);
-}
-
-export const handleBeganPath = ({ x, y }) => beginPath(x, y);
-export const handleStrokedPath = ({ x, y }) => strokePath(x, y);

@@ -7,6 +7,7 @@ const userName = "loginUser-name"
 
 const body = document.querySelector("body")
 const loggedIn = document.querySelector(".loginStatus")
+const chat__messages = document.querySelector(".chat__messages")
 const logout = document.querySelector(".logoutStatus")
 const loginForm = document.querySelector(".loginForm")
 
@@ -39,7 +40,7 @@ function paintUserName(name){
     body.className = switchTologin;
     welcome.className = userName;
     welcome.innerText = `${name} 🧚🏻‍♀️`;
-    loggedIn.append(welcome);
+    chat__messages.append(welcome);
 }
 
 if(loginForm){

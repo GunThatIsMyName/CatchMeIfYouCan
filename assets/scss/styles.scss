@@ -2,6 +2,7 @@
 @import "./_variable";
 @import "./chat.scss";
 @import "./game.scss";
+// @import "./login.scss";
 
 
 
@@ -17,67 +18,25 @@ html {
 height: 100%;
 }
 body{
-    background-color: $black;
+    background-color: #3465A4;
     display: flex;
-    justify-content: center;
+    max-width: 1200px;
+    margin: auto;
+    justify-content: space-around;
     align-items: center;
     height: 100vh;
-    width: 1200px;
-    margin: auto;
+    .loginStatus,
+    .logoutStatus{
+        display: none;
+    }
     &.login{
         .loginStatus{
             display: flex;
-            flex-direction: column-reverse;
         }
     }
     &.logout{
         .logoutStatus{
-            display: block;
-        }
-    }
-    .loginStatus{
-        display: none;
-        .loginUser-name{
-            font-size: 20px;
-            font-weight: bold;
-            color: black;
-            background-color:#CDCC71;
-            padding: 20px 40px;
-            border-radius: 20px;
-        }
-    }
-    .logoutStatus{
-        display: none;
-        .loginForm{
-            .loginInput{
-                padding: 16px 20px;
-                text-align: center;
-                border-radius: 20px;
-                font-size: 20px;
-                &:focus{
-                    outline: none;
-                }
-                &:hover{
-                    outline: none;
-                }
-            }
-           
-        }
-    }
-    #loginNotification{
-        position: absolute;
-        top: 100px;
-        left: 50%;
-        opacity: 0;
-        padding: 16px 20px;
-        border-radius: 20px;
-        transition: all 0.1s ease-in-out;
-        pointer-events: none;
-        transform: translateY(-80px);
-        &.showing{
-            opacity: 1;
-            transform: translateY(0px);
-            pointer-events: visible;
+            display: flex;
         }
     }
 }
